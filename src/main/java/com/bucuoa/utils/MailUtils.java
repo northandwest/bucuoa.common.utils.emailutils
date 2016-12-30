@@ -22,7 +22,6 @@ public class MailUtils {
 		config.setSmtphost("smtp.163.com");
 		config.setUser("");
 		config.setPassword("");
-		
 
 		MailBody mail = new MailBody();
 		mail.setSubject("你好");
@@ -33,21 +32,16 @@ public class MailUtils {
 		send(config, mail);
 	}
 
-	private static void send( MailServerConfig config , MailBody mail) throws AddressException, MessagingException {
-		
+	private static void send(MailServerConfig config, MailBody mail) throws AddressException, MessagingException {
+
 		final Properties props = new Properties();
-		/*
-		 * 可用的属性： mail.store.protocol / mail.transport.protocol / mail.host /
-		 * mail.user / mail.from
-		 */
+
 		// 表示SMTP发送邮件，需要进行身份验证
 		props.put("mail.smtp.auth", String.valueOf(config.isAuth()));
 		props.put("mail.smtp.host", config.getSmtphost());
-		// 发件人的账号
 		props.put("mail.user", config.getUser());
-		// 访问SMTP服务时需要提供的密码
 		props.put("mail.password", config.getPassword());
-		
+
 		Authenticator authenticator = new Authenticator() {
 			@Override
 			protected PasswordAuthentication getPasswordAuthentication() {
@@ -60,6 +54,14 @@ public class MailUtils {
 		// 使用环境属性和授权信息，创建邮件会话
 		Session mailSession = Session.getInstance(props, authenticator);
 		// 创建邮件消息
+		MimeMessage message = buildMessage(mail, mailSession);
+
+		// 发送邮件
+		Transport.send(message);
+	}
+
+	private static MimeMessage buildMessage(MailBody mail, Session mailSession)
+			throws AddressException, MessagingException {
 		MimeMessage message = new MimeMessage(mailSession);
 		// 设置发件人
 		InternetAddress form = new InternetAddress(mail.getFrom());
@@ -84,8 +86,6 @@ public class MailUtils {
 
 		// 设置邮件的内容体
 		message.setContent(mail.getContent(), "text/html;charset=UTF-8");
-
-		// 发送邮件
-		Transport.send(message);
+		return message;
 	}
 }

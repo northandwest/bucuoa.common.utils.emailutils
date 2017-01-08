@@ -20,7 +20,7 @@ public class MailUtils {
 		MailServerConfig config = new MailServerConfig();
 		config.setAuth(true);
 		config.setSmtphost("smtp.163.com");
-		config.setUser("");
+		config.setUser("@163.com");
 		config.setPassword("");
 
 		MailBody mail = new MailBody();
@@ -32,7 +32,7 @@ public class MailUtils {
 		send(config, mail);
 	}
 
-	private static void send(MailServerConfig config, MailBody mail) throws AddressException, MessagingException {
+	public static void send(MailServerConfig config, MailBody mail) throws AddressException, MessagingException {
 
 		final Properties props = new Properties();
 

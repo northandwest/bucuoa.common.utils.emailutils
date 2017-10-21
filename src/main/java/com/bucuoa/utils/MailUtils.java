@@ -57,7 +57,11 @@ public class MailUtils {
 		MimeMessage message = buildMessage(mail, mailSession);
 
 		// 发送邮件
-		Transport.send(message);
+		try {
+			Transport.send(message);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private static MimeMessage buildMessage(MailBody mail, Session mailSession)
